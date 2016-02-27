@@ -1,0 +1,25 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "AspNetCore.CdnAssets allows you to easily server your static assets through CDN",
+  "authors": [ "Tomas Dolezal" ],
+  "tags": [ "cdn", "asp.net", "core" ],
+  "projectUrl": "http://github.com/dolly22/CdnAssets",
+  "licenseUrl": "http://github.com/dolly22/CdnAssets/blob/master/LICENSE.md",
+
+  "dependencies": {    
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final"
+  },
+  "frameworks": {
+    "net451": { },
+    "dotnet5.4": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516"
+      }
+    }
+  }
+}
