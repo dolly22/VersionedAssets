@@ -1,6 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "AspNetCore.CdnAssets allows you to easily server your static assets through CDN",
+  "description": "AspNetCore.CdnAssets allows you to easily serve your static assets through CDN",
   "authors": [ "Tomas Dolezal" ],
   "tags": [ "cdn", "asp.net", "core" ],
   "projectUrl": "http://github.com/dolly22/CdnAssets",
