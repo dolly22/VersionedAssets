@@ -15,7 +15,8 @@ namespace SampleWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLogging();
-            services.AddMvc();            
+            services.AddMvc();
+            services.AddVersionedAssets();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,8 +26,8 @@ namespace SampleWebApp
 
             app.UseIISPlatformHandler();
 
-            // respond to cdn origin pull asset requests in the form /cdn/[hash]/* 
-            app.UseCdnAssets("/cdn");
+            // respond to version asset requests (defaults to /static/[hash]) 
+            app.UseVersionedAssets();
 
             app.UseMvcWithDefaultRoute();
         }

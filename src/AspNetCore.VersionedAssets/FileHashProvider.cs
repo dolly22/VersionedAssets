@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace AspNetCore.CdnAssets
+namespace AspNetCore.VersionedAssets
 {
     public class FileHashProvider
     {

@@ -1,15 +1,13 @@
-﻿@addTagHelper "*, AspNetCore.CdnAssets"
-@{
-    // normally this would be cdn url and cdn would be configured to origin pull.
-    var cdnUrl = "http://localhost:5000/cdn";
-}
+﻿@addTagHelper "*, AspNetCore.VersionedAssets"
 <!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
   <title>SPA</title>
+  <link rel="icon" type="image/x-icon" href="~/favicon.ico" asset-version="file" />
+  <link rel="stylesheet" href="~/bundles/site.css" asset-version="file" />
 </head>
 <body>
-  <script src="~/static/app.js" asp-cdn-asset="@cdnUrl"></script>
+  <script src="~/bundles/app.js" asset-version="file"></script>
 </body>
 </html>

@@ -9,22 +9,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspNetCore.CdnAssets
+namespace AspNetCore.VersionedAssets
 {
-    public class CdnAssetsMiddleware
+    public class VersionedAssetsMiddleware
     {
         private readonly RequestDelegate next;
         private readonly ILogger logger;
         private readonly FileHashProvider hashProvider;
 
-        public CdnAssetsMiddleware(
+        public VersionedAssetsMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IHostingEnvironment hostingEnv,
             IMemoryCache cache)
         {
             this.next = next;
-            this.logger = loggerFactory.CreateLogger<CdnAssetsMiddleware>();
+            this.logger = loggerFactory.CreateLogger<VersionedAssetsMiddleware>();
             this.hashProvider = new FileHashProvider(hostingEnv.WebRootFileProvider, cache, new PathString());
         }
 

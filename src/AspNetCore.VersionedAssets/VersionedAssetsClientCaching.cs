@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspNetCore.CdnAssets
+namespace AspNetCore.VersionedAssets
 {
-    public class CdnAssetsClientCaching
+    public class VersionedAssetsClientCaching
     {
         static readonly DateTime expiresNoCache = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

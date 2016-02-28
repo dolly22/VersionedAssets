@@ -1,12 +1,12 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "AspNetCore.CdnAssets allows you to easily serve your static assets through CDN",
+  "description": "AspNetCore.VersionedAssets allows you to easily version your static assets",
   "authors": [ "Tomas Dolezal" ],
   "tags": [ "cdn", "asp.net", "core" ],
-  "projectUrl": "http://github.com/dolly22/CdnAssets",
-  "licenseUrl": "http://github.com/dolly22/CdnAssets/blob/master/LICENSE.md",
+  "projectUrl": "http://github.com/dolly22/VersionedAssets",
+  "licenseUrl": "http://github.com/dolly22/VersionedAssets/blob/master/LICENSE.md",
 
-  "dependencies": {    
+  "dependencies": {
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final"
   },
