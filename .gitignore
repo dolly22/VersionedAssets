@@ -3,6 +3,7 @@
 
 # Visual studio
 .vs
+.fake
 
 # User-specific files
 *.suo
