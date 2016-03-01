@@ -28,21 +28,21 @@ namespace AspNetCore.VersionedAssets.Mvc
             };
 
         private readonly Lazy<FileHashProvider> lazyHashProvider;
-        private readonly VersionedAssetsOptions options;
+        private readonly IVersionedAssetsOptions options;
 
         public VersionedUrlTagHelper(
             IHostingEnvironment hostingEnvironment,
             IMemoryCache cache,
             IHtmlEncoder htmlEncoder,
             IUrlHelper urlHelper,
-            Func<VersionedAssetsOptions> optionsProvider)
+            IVersionedAssetsOptions options)
         {
             lazyHashProvider = new Lazy<FileHashProvider>(() => new FileHashProvider(
                 hostingEnvironment.WebRootFileProvider,
                 cache,
                 ViewContext.HttpContext.Request.PathBase));
 
-            options = optionsProvider.Invoke();
+            this.options = options;
         }
 
         [HtmlAttributeNotBound]

@@ -16,16 +16,19 @@ namespace AspNetCore.VersionedAssets
         private readonly RequestDelegate next;
         private readonly ILogger logger;
         private readonly FileHashProvider hashProvider;
+        private readonly IVersionedAssetsOptions options;
 
         public VersionedAssetsMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             IHostingEnvironment hostingEnv,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            IVersionedAssetsOptions options)
         {
             this.next = next;
             this.logger = loggerFactory.CreateLogger<VersionedAssetsMiddleware>();
             this.hashProvider = new FileHashProvider(hostingEnv.WebRootFileProvider, cache, new PathString());
+            this.options = options;
         }
 
         public async Task Invoke(HttpContext context)
@@ -35,8 +38,18 @@ namespace AspNetCore.VersionedAssets
 
             if (TryExtractAssetHash(context.Request.Path, out assetHash, out assetPath))
             {
-                var computedHash = hashProvider.GetContentHash(assetPath);
-                var hashMatched = string.Equals(assetHash, computedHash, StringComparison.Ordinal);
+                var hashMatched = false;
+
+                // try to compare global hash
+                if (string.Equals(options.GlobalVersion, assetHash, StringComparison.Ordinal))
+                {
+                    hashMatched = true;
+                }
+                else
+                {
+                    var computedHash = hashProvider.GetContentHash(assetPath);
+                    hashMatched = string.Equals(assetHash, computedHash, StringComparison.Ordinal);
+                }
 
                 // rewrite request path
                 context.Request.Path = new PathString(assetPath);
@@ -45,7 +58,8 @@ namespace AspNetCore.VersionedAssets
                 {
                     HashMatched = hashMatched
                 });
-                logger.LogInformation($"Origin pull {assetPath}, url-hash:{assetHash}, file-hash:{computedHash}, matched:{hashMatched}");
+
+                logger.LogInformation($"Origin pull {assetPath}, url-hash:{assetHash}, matched:{hashMatched}");
             }
             else
             {
