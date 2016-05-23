@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (setupAction != null)
                 setupAction.Invoke(options);
 
-            services.Add(ServiceDescriptor.Instance<IVersionedAssetsOptions>(options));
+            services.Add(ServiceDescriptor.Singleton<IVersionedAssetsOptions>(options));
         }
     }
 }

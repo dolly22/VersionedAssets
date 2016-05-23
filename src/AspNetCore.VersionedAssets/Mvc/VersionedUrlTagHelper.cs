@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.AspNet.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.WebEncoders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace AspNetCore.VersionedAssets.Mvc
@@ -27,15 +30,15 @@ namespace AspNetCore.VersionedAssets.Mvc
                 { "script", new[] { "src" } }                               
             };
 
+        private readonly HtmlEncoder htmlEncoder;
         private readonly Lazy<FileHashProvider> lazyHashProvider;
         private readonly IVersionedAssetsOptions options;
 
         public VersionedUrlTagHelper(
             IHostingEnvironment hostingEnvironment,
             IMemoryCache cache,
-            IHtmlEncoder htmlEncoder,
-            IUrlHelper urlHelper,
-            IVersionedAssetsOptions options)
+            IVersionedAssetsOptions options,
+            HtmlEncoder htmlEncoder)
         {
             lazyHashProvider = new Lazy<FileHashProvider>(() => new FileHashProvider(
                 hostingEnvironment.WebRootFileProvider,
@@ -43,6 +46,7 @@ namespace AspNetCore.VersionedAssets.Mvc
                 ViewContext.HttpContext.Request.PathBase));
 
             this.options = options;
+            this.htmlEncoder = htmlEncoder;
         }
 
         [HtmlAttributeNotBound]
@@ -74,12 +78,46 @@ namespace AspNetCore.VersionedAssets.Mvc
 
         protected void ProcessUrlAttribute(string attributeName, TagHelperOutput output)
         {
-            var attr = output.Attributes[attributeName];
+            var attIdx = output.Attributes.IndexOfName(attributeName);
+            var attr = output.Attributes[attIdx];
 
-            var path = attr.Value.ToString();
+            var path = GetAttributeValue(attr);
             var hash = lazyHashProvider.Value.GetContentHash(path);
-           
-            attr.Value = string.Format($"{options.UrlPrefix}/{hash}{path}");
+
+            var versionHref = string.Format($"{options.UrlPrefix}/{hash}{path}");
+            output.Attributes[attIdx] = new TagHelperAttribute(attributeName, versionHref);
+        }
+
+        private string GetAttributeValue(TagHelperAttribute attribute)
+        {
+            var stringValue = attribute.Value as string;
+            if (stringValue != null)
+            {
+                return stringValue;
+            }
+            else
+            {
+                var htmlContent = attribute.Value as IHtmlContent;
+                if (htmlContent != null)
+                {
+                    var htmlString = htmlContent as HtmlString;
+                    if (htmlString != null)
+                    {
+                        // No need for a StringWriter in this case.
+                        stringValue = htmlString.ToString();
+                    }
+                    else
+                    {
+                        using (var writer = new StringWriter())
+                        {
+                            htmlContent.WriteTo(writer, htmlEncoder);
+                            stringValue = writer.ToString();
+                        }
+                    }
+                    return stringValue;
+                }
+            }
+            throw new InvalidOperationException();
         }
     }
 }

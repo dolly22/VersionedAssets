@@ -2,23 +2,24 @@
   "version": "1.0.0-*",
   "description": "AspNetCore.VersionedAssets allows you to easily version your static assets",
   "authors": [ "Tomas Dolezal" ],
-  "tags": [ "cdn", "asp.net", "core" ],
-  "projectUrl": "http://github.com/dolly22/VersionedAssets",
-  "licenseUrl": "http://github.com/dolly22/VersionedAssets/blob/master/LICENSE.md",
+
+  "packOptions": {
+    "tags": [ "cdn", "asp.net", "core" ],
+    "projectUrl": "http://github.com/dolly22/VersionedAssets",
+    "licenseUrl": "http://github.com/dolly22/VersionedAssets/blob/master/LICENSE.md"
+  },
 
   "dependencies": {
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final"
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final"
   },
   "frameworks": {
     "net451": { },
-    "dotnet5.4": {
+    "netstandard1.5": {
+      "imports": [
+        "portable-net451+win8"
+      ],
       "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
       }
     }
   }
