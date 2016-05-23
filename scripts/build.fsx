@@ -22,7 +22,7 @@ Target "Clean" (fun _ ->
 Target "DetermineVersion" (fun _ ->   
     let semver = 
         getSemverInfoDefault 
-        |> appendPreReleaseBuildNumber 4
+        |> appendPreReleaseBuildNumber 3
 
     version <- Some semver        
     currentGitSha <- getCurrentSHA1 currentDirectory
