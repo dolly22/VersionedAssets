@@ -4,6 +4,10 @@ references: strict
 
 source https://nuget.org/api/v2
 
-nuget FAKE.Core 4.20.0
+nuget NuGet.CommandLine
+nuget FAKE
+nuget FAKE.Lib
 nuget FAKE.Dotnet
+
+github dolly22/FAKE.Gitsemver Gitsemver.fsx
 
