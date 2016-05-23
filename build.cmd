@@ -19,6 +19,6 @@ pushd %~dp0
 
 echo * starting FAKE build...
 rem add --break option for debugging
-scripts\packages\FAKE.Core\tools\Fake.exe scripts\build.fsx %*
+scripts\packages\FAKE\tools\Fake.exe scripts\build.fsx %*
 
 popd
