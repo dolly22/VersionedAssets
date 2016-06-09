@@ -5,34 +5,49 @@ using System.Threading.Tasks;
 
 namespace AspNetCore.VersionedAssets
 {
-    public interface IVersionedAssetsOptions
+    public class VersionedAssetsOptions
     {
-        bool IsEnabled { get; }
+        public VersionedAssetsOptions()
+        {
+            this.Caching = new VersionedAssetsCaching();
+        }
 
         /// <summary>
-        /// Prefix content path
+        /// Enable versioning (when disabled tag helper do not alter url attributes)
         /// </summary>
-        string UrlPrefix { get; }
-
-        /// <summary>
-        /// Global assets version
-        /// </summary>
-        string GlobalVersion { get; }
-
-        /// <summary>
-        /// Always use gloval version as prefix (event prefix when file content version is requested)
-        /// </summary>
-        bool AlwaysPrefixGlobalVersion { get; }
-    }
-
-    public class VersionedAssetsOptions : IVersionedAssetsOptions
-    {
         public bool IsEnabled { get; set; } = true;
 
+        /// <summary>
+        /// Server side - path match versioned assets middleware handles asset requests. Defaults to '/static'
+        /// </summary>
+        public string PathMatch { get; set; } = "/static";
+
+        /// <summary>
+        /// Client side - url prefix to use when generationg taghelper urls. Defaults to '/static'
+        /// </summary>
         public string UrlPrefix { get; set; } = "/static";
 
+        /// <summary>
+        /// Global version to use
+        /// </summary>
         public string GlobalVersion { get; set; }
 
-        public bool AlwaysPrefixGlobalVersion { get; set; }
+        /// <summary>
+        /// Assets caching options
+        /// </summary>
+        public VersionedAssetsCaching Caching { get; set; }
+    }
+
+    public class VersionedAssetsCaching
+    {
+        /// <summary>
+        /// Cache is public
+        /// </summary>
+        public bool Public { get; set; } = true;
+
+        /// <summary>
+        /// Cache max age
+        /// </summary>
+        public TimeSpan MaxAge { get; set; } = TimeSpan.FromDays(365);
     }
 }

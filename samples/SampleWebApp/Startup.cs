@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using System.Reflection;
 
 namespace SampleWebApp
 {
@@ -16,11 +17,7 @@ namespace SampleWebApp
         {
             services.AddLogging();
             services.AddMvc();
-            services.AddVersionedAssets(options =>
-            {
-                options.GlobalVersion = "globalversion";
-                options.AlwaysPrefixGlobalVersion = true;
-            });
+            services.AddVersionedAssets();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +31,10 @@ namespace SampleWebApp
             }
 
             // respond to version asset requests (defaults to /static/[hash]) 
-            app.UseVersionedAssets();
+            app.UseVersionedAssets()
+                //.WithUrlPrefix("//mycdn.azureedge.net")
+                .WithAssemblyHashGlobalVersion(typeof(Startup).GetTypeInfo().Assembly);
+
 
             app.UseMvcWithDefaultRoute();
         }

@@ -83,7 +83,7 @@ namespace AspNetCore.VersionedAssets
             return value;
         }
 
-        private static string GetHashForFile(IFileInfo fileInfo)
+        static string GetHashForFile(IFileInfo fileInfo)
         {
             using (var sha = SHA256.Create())
             {

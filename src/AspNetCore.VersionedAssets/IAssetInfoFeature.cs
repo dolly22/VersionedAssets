@@ -7,6 +7,9 @@ namespace AspNetCore.VersionedAssets
 {
     public interface IAssetInfoFeature
     {
-        bool HashMatched { get; set; }
+        /// <summary>
+        /// Url hash matched server side hash?
+        /// </summary>
+        bool UrlHashMatched { get; }
     }
 }

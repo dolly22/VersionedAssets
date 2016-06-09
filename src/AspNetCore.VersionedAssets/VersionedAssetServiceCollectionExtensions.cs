@@ -10,14 +10,15 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class VersionedAssetServiceCollectionExtensions
     {
-        public static void AddVersionedAssets(this IServiceCollection services, Action<VersionedAssetsOptions> setupAction = null)
+        public static IServiceCollection AddVersionedAssets(this IServiceCollection services, Action<VersionedAssetsOptions> setupAction = null)
         {
-            var options = new VersionedAssetsOptions();
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
 
-            if (setupAction != null)
-                setupAction.Invoke(options);
+            services.AddOptions();
+            services.Configure(setupAction ?? (options => { }));
 
-            services.Add(ServiceDescriptor.Singleton<IVersionedAssetsOptions>(options));
+            return services;
         }
     }
 }

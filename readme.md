@@ -28,9 +28,10 @@ public class Startup
     {
         loggerFactory.AddConsole(LogLevel.Debug);
 
-
         // respond to cdn origin pull asset requests in the form /static/[hash]/* 
-        app.UseVersionedAssets();
+        app.UseVersionedAssets()
+            .WithUrlPrefix("//[your.cdn]")
+
         app.UseMvcWithDefaultRoute();
     }
 }
@@ -48,7 +49,7 @@ public class Startup
   <title>SPA</title>
 </head>
 <body>
-  <script src="~/bundles/app.js" asset-version="file"></script>
+  <script src="~/bundles/app.js" asset-version="FileVersion"></script>
 </body>
 </html>
 

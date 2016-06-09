@@ -7,6 +7,9 @@ namespace AspNetCore.VersionedAssets
 {
     public class AssetInfoFeature : IAssetInfoFeature
     {
-        public bool HashMatched { get; set; }
+        public static readonly IAssetInfoFeature Matched = new AssetInfoFeature { UrlHashMatched = true };
+        public static readonly IAssetInfoFeature NotMatched = new AssetInfoFeature { UrlHashMatched = false };
+
+        public bool UrlHashMatched { get; set; }
     }
 }

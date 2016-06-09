@@ -8,8 +8,18 @@ using System.Threading.Tasks;
 namespace AspNetCore.VersionedAssets
 {
     public class VersionedAssetsClientCaching
-    {
+    { 
         static readonly DateTime expiresNoCache = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        readonly VersionedAssetsCaching cachingOptions;
+
+        public VersionedAssetsClientCaching(VersionedAssetsCaching cachingOptions)
+        {
+            if (cachingOptions == null)
+                throw new ArgumentNullException(nameof(cachingOptions));
+               
+            this.cachingOptions = cachingOptions;
+        }
 
         public void ApplyResponseHeaders(HttpContext context)
         {
@@ -21,13 +31,13 @@ namespace AspNetCore.VersionedAssets
                 return;
 
             var headers = context.Response.GetTypedHeaders();
-            if (assetInfo.HashMatched)
+            if (assetInfo.UrlHashMatched)
             {
                 // apply caching headers
                 headers.CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue
                 {
-                    Public = true,
-                    MaxAge = TimeSpan.FromDays(365)
+                    Public = cachingOptions.Public,
+                    MaxAge = cachingOptions.MaxAge
                 };
                 headers.Append("Vary", "Accept-Encoding");
             }

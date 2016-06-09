@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
 using System;
 using System.Collections.Generic;
@@ -32,20 +33,29 @@ namespace AspNetCore.VersionedAssets.Mvc
 
         private readonly HtmlEncoder htmlEncoder;
         private readonly Lazy<FileHashProvider> lazyHashProvider;
-        private readonly IVersionedAssetsOptions options;
+        private readonly VersionedAssetsOptions options;
 
         public VersionedUrlTagHelper(
             IHostingEnvironment hostingEnvironment,
             IMemoryCache cache,
-            IVersionedAssetsOptions options,
+            IOptions<VersionedAssetsOptions> options,
             HtmlEncoder htmlEncoder)
         {
+            if (hostingEnvironment == null)
+                throw new ArgumentNullException(nameof(hostingEnvironment));
+            if (cache == null)
+                throw new ArgumentNullException(nameof(cache));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+            if (htmlEncoder == null)
+                throw new ArgumentNullException(nameof(htmlEncoder));
+
             lazyHashProvider = new Lazy<FileHashProvider>(() => new FileHashProvider(
                 hostingEnvironment.WebRootFileProvider,
                 cache,
                 ViewContext.HttpContext.Request.PathBase));
 
-            this.options = options;
+            this.options = options.Value;
             this.htmlEncoder = htmlEncoder;
         }
 
@@ -95,17 +105,12 @@ namespace AspNetCore.VersionedAssets.Mvc
             {
                 case VersionKind.GlobalVersion:
                     if (string.IsNullOrWhiteSpace(options.GlobalVersion))
-                        throw new InvalidOperationException("Unable to use global version, it's not set");
+                        return path;
                     versionPart = options.GlobalVersion;
                     break;
 
                 case VersionKind.FileVersion:
-                    var contentHash = lazyHashProvider.Value.GetContentHash(path);
-
-                    if (options.AlwaysPrefixGlobalVersion && !string.IsNullOrWhiteSpace(options.GlobalVersion))
-                        versionPart = $"{options.GlobalVersion}{contentHash}";
-                    else
-                        versionPart = contentHash;
+                    versionPart = lazyHashProvider.Value.GetContentHash(path);
                     break;
 
                 default:
