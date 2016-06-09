@@ -54,7 +54,7 @@ namespace AspNetCore.VersionedAssets.Mvc
         public ViewContext ViewContext { get; set; }
 
         [HtmlAttributeName(VersionedAssetAttributeName)]
-        public string VersionType { get; set; }
+        public VersionKind VersionKind { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -63,7 +63,7 @@ namespace AspNetCore.VersionedAssets.Mvc
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
 
-            if (!options.IsEnabled || string.IsNullOrWhiteSpace(VersionType))
+            if (!options.IsEnabled)
                 return;
 
             string[] attributeNames;
@@ -82,10 +82,36 @@ namespace AspNetCore.VersionedAssets.Mvc
             var attr = output.Attributes[attIdx];
 
             var path = GetAttributeValue(attr);
-            var hash = lazyHashProvider.Value.GetContentHash(path);
+            var versionedPath = BuildVersionedUrl(path);
 
-            var versionHref = string.Format($"{options.UrlPrefix}/{hash}{path}");
-            output.Attributes[attIdx] = new TagHelperAttribute(attributeName, versionHref);
+            output.Attributes[attIdx] = new TagHelperAttribute(attributeName, versionedPath);
+        }
+
+        private string BuildVersionedUrl(string path)
+        {
+            string versionPart;
+
+            switch (VersionKind)
+            {
+                case VersionKind.GlobalVersion:
+                    if (string.IsNullOrWhiteSpace(options.GlobalVersion))
+                        throw new InvalidOperationException("Unable to use global version, it's not set");
+                    versionPart = options.GlobalVersion;
+                    break;
+
+                case VersionKind.FileVersion:
+                    var contentHash = lazyHashProvider.Value.GetContentHash(path);
+
+                    if (options.AlwaysPrefixGlobalVersion && !string.IsNullOrWhiteSpace(options.GlobalVersion))
+                        versionPart = $"{options.GlobalVersion}{contentHash}";
+                    else
+                        versionPart = contentHash;
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unsupported version kind - {VersionKind}");
+            }
+            return string.Format($"{options.UrlPrefix}/{versionPart}{path}");
         }
 
         private string GetAttributeValue(TagHelperAttribute attribute)
@@ -119,5 +145,18 @@ namespace AspNetCore.VersionedAssets.Mvc
             }
             throw new InvalidOperationException();
         }
+    }
+
+    public enum VersionKind
+    {
+        /// <summary>
+        /// Use file content hash version
+        /// </summary>
+        FileVersion,
+
+        /// <summary>
+        /// Use gloval version
+        /// </summary>
+        GlobalVersion
     }
 }

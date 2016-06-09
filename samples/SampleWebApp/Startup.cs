@@ -16,7 +16,11 @@ namespace SampleWebApp
         {
             services.AddLogging();
             services.AddMvc();
-            services.AddVersionedAssets();
+            services.AddVersionedAssets(options =>
+            {
+                options.GlobalVersion = "globalver";
+                options.AlwaysPrefixGlobalVersion = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

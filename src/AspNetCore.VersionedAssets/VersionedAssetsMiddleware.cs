@@ -48,7 +48,13 @@ namespace AspNetCore.VersionedAssets
                 else
                 {
                     var computedHash = hashProvider.GetContentHash(assetPath);
+
+                    // try to match using computedHash only
                     hashMatched = string.Equals(assetHash, computedHash, StringComparison.Ordinal);
+
+                    // also try to use prefixed file content version
+                    if (!hashMatched && options.AlwaysPrefixGlobalVersion && !string.IsNullOrWhiteSpace(options.GlobalVersion))
+                        hashMatched = string.Equals(assetHash, options.GlobalVersion + computedHash, StringComparison.Ordinal);
                 }
 
                 // rewrite request path
@@ -59,7 +65,7 @@ namespace AspNetCore.VersionedAssets
                     HashMatched = hashMatched
                 });
 
-                logger.LogInformation($"Origin pull {assetPath}, url-hash:{assetHash}, matched:{hashMatched}");
+                logger.LogTrace($"Origin pull {assetPath}, url-hash:{assetHash}, matched:{hashMatched}");
             }
             else
             {

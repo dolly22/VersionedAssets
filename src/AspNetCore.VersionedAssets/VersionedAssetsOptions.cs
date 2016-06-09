@@ -9,9 +9,20 @@ namespace AspNetCore.VersionedAssets
     {
         bool IsEnabled { get; }
 
+        /// <summary>
+        /// Prefix content path
+        /// </summary>
         string UrlPrefix { get; }
 
+        /// <summary>
+        /// Global assets version
+        /// </summary>
         string GlobalVersion { get; }
+
+        /// <summary>
+        /// Always use gloval version as prefix (event prefix when file content version is requested)
+        /// </summary>
+        bool AlwaysPrefixGlobalVersion { get; }
     }
 
     public class VersionedAssetsOptions : IVersionedAssetsOptions
@@ -21,5 +32,7 @@ namespace AspNetCore.VersionedAssets
         public string UrlPrefix { get; set; } = "/static";
 
         public string GlobalVersion { get; set; }
+
+        public bool AlwaysPrefixGlobalVersion { get; set; }
     }
 }
