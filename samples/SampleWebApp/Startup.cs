@@ -18,7 +18,7 @@ namespace SampleWebApp
             services.AddMvc();
             services.AddVersionedAssets(options =>
             {
-                options.GlobalVersion = "globalver";
+                options.GlobalVersion = "globalversion";
                 options.AlwaysPrefixGlobalVersion = true;
             });
         }
