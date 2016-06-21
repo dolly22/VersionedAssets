@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,8 @@ namespace AspNetCore.VersionedAssets
                     Public = cachingOptions.Public,
                     MaxAge = cachingOptions.MaxAge
                 };
-                headers.Append("Vary", "Accept-Encoding");
+                headers.Append(HeaderNames.Vary, "Accept-Encoding");
+                headers.Headers.Remove(HeaderNames.Pragma);
             }
             else
             {
@@ -51,7 +53,7 @@ namespace AspNetCore.VersionedAssets
                     NoStore = true
                 };
                 headers.Expires = expiresNoCache;
-                headers.Append("Pragma", "no-cache");
+                headers.Append(HeaderNames.Pragma, "no-cache");
             }
         }
     }
