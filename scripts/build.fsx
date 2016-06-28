@@ -43,7 +43,8 @@ Target "PrepareDotnetCli" (fun _ ->
     let setOptions (options: DotNetCliInstallOptions) = 
         { options with 
             Version = Version sdkVersion
-            Channel = Beta
+            InstallerBranch = "rel/1.0.0-preview2"
+            Channel = Channel "preview"
             CustomInstallDir = Some customInstallDirectory
         }    
 
@@ -60,7 +61,9 @@ Target "BuildProjects" (fun _ ->
         |> Seq.iter(fun proj -> 
             let versionSuffix = 
                 match version with
-                | Some x -> Some x.PreRelease.Value.Name
+                | Some x -> match x.PreRelease with
+                            | Some pre -> Some pre.Name
+                            | None -> None
                 | None -> None
 
             // build project and produce outputs
