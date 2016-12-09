@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AspNetCore.VersionedAssets", "src\AspNetCore.VersionedAssets\AspNetCore.VersionedAssets.xproj", "{233860EE-387E-47BA-9BBC-55E3DD40F692}"
 EndProject
@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{6CCDAFA9-AF59-491C-9DC1-42FF28CC02B5}"
 	ProjectSection(SolutionItems) = preProject
 		readme.md = readme.md
+		release_notes.md = release_notes.md
 	EndProjectSection
 EndProject
 Global

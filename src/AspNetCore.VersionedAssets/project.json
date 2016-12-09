@@ -1,5 +1,5 @@
-﻿{
-  "version": "1.0.0-*",
+{
+  "version": "1.1.0-*",
   "description": "AspNetCore.VersionedAssets allows you to easily version your static assets",
   "authors": [ "Tomas Dolezal" ],
 
@@ -10,8 +10,8 @@
   },
 
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc": "1.0.0",
-    "Microsoft.AspNetCore.StaticFiles": "1.0.0"
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0"
   },
   "frameworks": {
     "net451": { },
