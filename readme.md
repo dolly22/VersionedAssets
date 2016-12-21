@@ -8,8 +8,8 @@ Following example assumes your CDN is configured with origin pull to base url
 <code>http://[your.site]/static</code>.
 
 TagHelper generated url: <code>http://[your.cdn]/[version-hash]/bundles/app.js</code>
-Origin pull url: <code>http://[your.side]/static/[version-hash]/bundles/app.js</code>
 
+Request from cdn are pulling from urls: <code>http://[your.site]/static/[version-hash]/bundles/app.js</code>
 
 ## Startup.cs configuration
 
@@ -37,7 +37,7 @@ public class Startup
 }
 ```
 
-## View configuration
+## View usage
 
 
 ```razor
@@ -54,3 +54,32 @@ public class Startup
 </html>
 
 ```
+
+## Asset version mode
+
+There are two modes how to specify `asset-version` in tag helper:
+
+* FileVersion - [version-hash] is based on file sha2 hash
+* GlobalVersion -  [version-hash] is static value for all assets configured in Startup.cs. It might be assembly build time, repository git hash... 
+just something that changes for every deployment
+
+Global version `Startup.cs` configuration example:
+
+```c#
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddVersionedAssets(o =>  { 
+            o.GlobalVersion = "xxx"
+        });       
+    }
+}
+```
+
+## Usage without CDN (cache busting only)
+
+It's also possible to use this without CDN for cache busting only.
+
+When no explicit url (CDN) prefix is set VersionedAssets works in local mode with `/static` prefix. TagHelper generates url 
+like `/static/[version-hash]/bundles/app.js` that are served with registered middleware.
